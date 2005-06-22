@@ -32,7 +32,7 @@ install -d $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root)
+%defattr(644,root,root,755)
 %dir /bin/
 %dir /lib/
 %dir /lib/gcfilms/
@@ -48,4 +48,4 @@ rm -rf $RPM_BUILD_ROOT
 /lib/gcfilms/GCLang/*.pm
 /lib/gcfilms/GCPlugins/*.pm
 /share/gcfilms/**
-%attr(0755,root,root) /bin/gcfilms
+%attr(755,root,root) /bin/gcfilms
