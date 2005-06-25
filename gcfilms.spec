@@ -1,8 +1,9 @@
+# TODO: %files are TOTALLY BROKEN
 Summary:	GCfilms, movies collection management
-Summary(pl):	GCfilms to narzêdzie do zarz±dzania kolekcjami filmów
+Summary(pl):	GCfilms - narzêdzie do zarz±dzania kolekcjami filmów
 Name:		gcfilms
 Version:	5.1
-Release:	1
+Release:	0.1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://download.gna.org/gcfilms/%{name}-%{version}.tar.gz
@@ -13,11 +14,11 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-GCfilms - Gtk2 Movie Catalog. Application that can be used to manage a
-movie collection.
+GCfilms is a Gtk2 Movie Catalog. Application that can be used to
+manage a movie collection.
 
 %description -l pl
-GCfilms - aplikacja bazuj±ca na Gtk2, a u¿ywana mo¿e byæ do
+GCfilms to katalog filmów oparty na Gtk2. Mo¿e byæ u¿ywany do
 zarz±dzania kolekcjami filmów.
 
 %prep
@@ -26,7 +27,9 @@ zarz±dzania kolekcjami filmów.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT
-%__cp -a . "${RPM_BUILD_ROOT-/}"
+
+# FIXME
+cp -a . $RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
