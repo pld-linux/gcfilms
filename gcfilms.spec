@@ -2,12 +2,11 @@
 Summary:	GCfilms, movies collection management
 Summary(pl):	GCfilms - narzêdzie do zarz±dzania kolekcjami filmów
 Name:		gcfilms
-Version:	5.1
+Version:	5.2
 Release:	0.1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://download.gna.org/gcfilms/%{name}-%{version}.tar.gz
-# Source0-md5:	d515ecce8b5aa5910d0705273a2058b7
 URL:		http://home.gna.org/gcfilms/
 Requires:	perl-Gtk2 >= 1.054
 BuildArch:	noarch
@@ -27,6 +26,14 @@ zarz±dzania kolekcjami filmów.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_bindir}
+install bin/gcfilms $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT%{_libdir}
+cp -a lib/gcfilms $RPM_BUILD_ROOT%{_libdir}
+install -d $RPM_BUILD_ROOT%{_datadir}
+cp -a share/gcfilms $RPM_BUILD_ROOT%{_datadir}
+install -d $RPM_BUILD_ROOT%{_desktopdir}
+cp share/applications/%{name}.desktop $RPM_BUILD_ROOT%{_desktopdir}
 
 # FIXME
 cp -a . $RPM_BUILD_ROOT
@@ -36,19 +43,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%dir /bin/
-%dir /lib/
-%dir /lib/gcfilms/
-%dir /lib/gcfilms/GCExport/
-%dir /lib/gcfilms/GCImport/
-%dir /lib/gcfilms/GCLang/
-%dir /lib/gcfilms/GCPlugins/
-%dir /share/
-%dir /share/gcfilms/
-/lib/gcfilms/*.pm
-/lib/gcfilms/GCExport/*.pm
-/lib/gcfilms/GCImport/*.pm
-/lib/gcfilms/GCLang/*.pm
-/lib/gcfilms/GCPlugins/*.pm
-/share/gcfilms/**
+%doc CHANGELOG CHANGELOG.fr README README.fr
 %attr(755,root,root) /bin/gcfilms
+%{_bindir}/gcfilms
+%{_libdir}/gcfilms/*
+%{_datadir}/gcfilms/*
+%{_desktopdir}/gcfilms.desktop
