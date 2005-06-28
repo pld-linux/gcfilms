@@ -1,4 +1,3 @@
-# TODO: %files are TOTALLY BROKEN
 Summary:	GCfilms, movies collection management
 Summary(pl):	GCfilms - narzêdzie do zarz±dzania kolekcjami filmów
 Name:		gcfilms
@@ -26,15 +25,12 @@ zarz±dzania kolekcjami filmów.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_datadir},%{_desktopdir}}
+
 install bin/gcfilms $RPM_BUILD_ROOT%{_bindir}
-install -d $RPM_BUILD_ROOT%{_libdir}
 cp -a lib/gcfilms $RPM_BUILD_ROOT%{_libdir}
-install -d $RPM_BUILD_ROOT%{_datadir}
 cp -a share/gcfilms $RPM_BUILD_ROOT%{_datadir}
-install -d $RPM_BUILD_ROOT%{_desktopdir}
-cp share/applications/%{name}.desktop $RPM_BUILD_ROOT%{_desktopdir}
+install share/applications/%{name}.desktop $RPM_BUILD_ROOT%{_desktopdir}
 
 # FIXME
 cp -a . $RPM_BUILD_ROOT
@@ -44,9 +40,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGELOG CHANGELOG.fr README README.fr
-%attr(755,root,root) /bin/gcfilms
-%{_bindir}/gcfilms
-%{_libdir}/gcfilms/*
-%{_datadir}/gcfilms/*
+%doc CHANGELOG README
+%lang(fr) %doc CHANGELOG.fr README.fr
+%attr(755,root,root) %{_bindir}/gcfilms
+%{_libdir}/gcfilms
+%{_datadir}/gcfilms
 %{_desktopdir}/gcfilms.desktop
