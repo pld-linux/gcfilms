@@ -7,6 +7,7 @@ Release:	0.1
 License:	GPL
 Group:		Applications/Databases
 Source0:	http://download.gna.org/gcfilms/%{name}-%{version}.tar.gz
+# Source0-md5:	5b8954427e264998b8078bc0a0b1be6f
 URL:		http://home.gna.org/gcfilms/
 Requires:	perl-Gtk2 >= 1.054
 BuildArch:	noarch
