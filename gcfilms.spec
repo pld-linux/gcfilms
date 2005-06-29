@@ -1,4 +1,4 @@
-Summary:	GCfilms, movies collection management
+Summary:	GCfilms - movies collection management
 Summary(pl):	GCfilms - narzêdzie do zarz±dzania kolekcjami filmów
 Name:		gcfilms
 Version:	5.2
