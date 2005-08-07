@@ -1,0 +1,146 @@
+--- gcfilms/bin/gcfilms	2005-06-26 17:28:53.000000000 +0200
++++ bin/gcfilms	2005-08-08 00:33:40.000000000 +0200
+@@ -26,35 +26,28 @@
+ use utf8;
+ 
+ use File::Path;
+-use FindBin qw($RealBin);
+ use POSIX qw(locale_h);
+ 
+-use lib "$RealBin/../lib/gcfilms";
++use lib qw(/usr/share/gcfilms/lib);
+ 
+ #XDG stuff
+ my $home = $ENV{'HOME'};
+-$home =~ s/\\/\//g if ($^O =~ /win32/i);
+ 
+-$ENV{XDG_CONFIG_HOME} = $RealBin.'/../config' if ($^O =~ /win32/i);
+ $ENV{XDG_CONFIG_HOME} = $home.'/.config' if ! exists $ENV{XDG_CONFIG_HOME};
+ mkpath $ENV{XDG_CONFIG_HOME};
+ 
+-$ENV{XDG_DATA_HOME} = $RealBin.'/../data' if ($^O =~ /win32/i);
+ $ENV{XDG_DATA_HOME} = $home.'/.local/share' if ! exists $ENV{XDG_DATA_HOME};
+ mkpath $ENV{XDG_DATA_HOME};
+ 
+ $ENV{GCF_CONFIG_HOME} = $ENV{XDG_CONFIG_HOME}.'/gcfilms';
+-$ENV{GCF_CONFIG_HOME} = $ENV{XDG_CONFIG_HOME} if ($^O =~ /win32/i);
+ mkdir $ENV{GCF_CONFIG_HOME};
+ $ENV{GCF_CONFIG_FILE} = $ENV{GCF_CONFIG_HOME}.'/gcfilms.conf';
+ $ENV{GCF_DATA_HOME} = $ENV{XDG_DATA_HOME}.'/gcfilms';
+-$ENV{GCF_DATA_HOME} = $ENV{XDG_DATA_HOME} if ($^O =~ /win32/i);
+ mkdir $ENV{GCF_DATA_HOME};
+ 
+-$ENV{GCF_BIN_DIR} = $RealBin;
+-($ENV{GCF_LIB_DIR} = $ENV{GCF_BIN_DIR}) =~ s/bin\/?$/lib\/gcfilms/;
+-
+-($ENV{GCF_SHARE_DIR} = $ENV{GCF_BIN_DIR}) =~ s/bin\/?$/share\/gcfilms/;
++$ENV{GCF_BIN_DIR} = '/usr/bin';
++$ENV{GCF_LIB_DIR} = '/usr/share/gcfilms/lib';
++$ENV{GCF_SHARE_DIR} = '/usr/share/gcfilms';
+ 
+ my $options = new GCOptionLoader($ENV{GCF_CONFIG_FILE});
+                
+--- gcfilms/lib/gcfilms/GCStyle.pm	2005-08-08 01:44:54.000000000 +0300
++++ GCStyle.pm	2005-08-08 01:48:39.766115248 +0300
+@@ -28,19 +28,15 @@
+     use base 'Exporter';
+ 	our @EXPORT = qw(%styles);
+ 
+-    use FindBin qw($RealBin);
+     use File::Basename;
+     our %styles;
+ 
+-    use Cwd;
+-    my $oldCwd = getcwd;
+-    chdir $RealBin;
+     foreach (glob "../share/gcfilms/style/*")
+     {
+         my $style = basename($_);
+         next if $style eq 'CVS';
+         my %tmpStyle;
+-        $tmpStyle{dir} = $RealBin.'/'.$_;
++        $tmpStyle{dir} = $_;
+         $tmpStyle{rcFile} = $tmpStyle{dir}.'/gtkrc';
+         $tmpStyle{name} = $style;
+         $styles{$style} = \%tmpStyle;
+@@ -49,8 +45,6 @@
+ #    $tmpStyle{dir} = '';
+ #    $tmpStyle{name} = 'Gtk';
+ #    $styles{Gtk} = \%tmpStyle;
+-    
+-    chdir $oldCwd;
+ }
+ 
+ 1;
+--- ./lib/gcfilms/GCOptions.pm	2005-07-14 16:39:08.000000000 +0200
++++ ../../lib/gcfilms/GCOptions.pm	2005-08-08 00:56:04.000000000 +0200
+@@ -65,7 +65,7 @@
+             open OPTIONS, ">$file" or $self->{parent}->optionsError('create');
+             printf OPTIONS 'images='.$ENV{GCF_DATA_HOME}.'/images/
+ autosave=1
+-browser=firefox
++browser=mozilla-firefox
+ file='.$ENV{GCF_DATA_HOME}.'/films.gcf
+ order==0
+ split=300
+--- gcfilms/lib/gcfilms/GCStyle.pm	2005-08-08 01:59:05.000000000 +0300
++++ GCStyle.pm	2005-08-08 02:01:04.210942432 +0300
+@@ -31,7 +31,7 @@
+     use File::Basename;
+     our %styles;
+ 
+-    foreach (glob "../share/gcfilms/style/*")
++    foreach (glob "/usr/share/gcfilms/*")
+     {
+         my $style = basename($_);
+         next if $style eq 'CVS';
+diff -Nur bla/lib/gcfilms/GCExport.pm ../BUILD/gcfilms/lib/gcfilms/GCExport.pm
+--- bla/lib/gcfilms/GCExport.pm	2005-04-07 19:18:45.000000000 +0200
++++ ../BUILD/gcfilms/lib/gcfilms/GCExport.pm	2005-08-08 01:04:54.000000000 +0200
+@@ -35,7 +35,7 @@
+ use Cwd;
+ my $oldCwd = getcwd;
+ chdir $RealBin;
+-foreach (glob "../lib/gcfilms/GCExport/*.pm")
++foreach (glob "/usr/share/gcfilms/lib/GCExport/*.pm")
+ {
+     my $export = basename($_, '.pm')."\n";
+     next if $export =~ /GCExportBase/;
+diff -Nur bla/lib/gcfilms/GCImport.pm ../BUILD/gcfilms/lib/gcfilms/GCImport.pm
+--- bla/lib/gcfilms/GCImport.pm	2005-04-10 14:24:33.000000000 +0200
++++ ../BUILD/gcfilms/lib/gcfilms/GCImport.pm	2005-08-08 01:04:54.000000000 +0200
+@@ -33,7 +33,7 @@
+ use Cwd;
+ my $oldCwd = getcwd;
+ chdir $RealBin;
+-foreach (glob "../lib/gcfilms/GCImport/*.pm")
++foreach (glob "/usr/share/gcfilms/lib/GCImport/*.pm")
+ {
+     my $import = basename($_, '.pm')."\n";
+     next if $import =~ /GCImportBase/;
+diff -Nur bla/lib/gcfilms/GCLang.pm ../BUILD/gcfilms/lib/gcfilms/GCLang.pm
+--- bla/lib/gcfilms/GCLang.pm	2005-06-11 14:18:36.000000000 +0200
++++ ../BUILD/gcfilms/lib/gcfilms/GCLang.pm	2005-08-08 01:04:54.000000000 +0200
+@@ -40,8 +40,8 @@
+     use Cwd;
+     my $oldCwd = getcwd;
+     chdir $baseDir;
+-    use lib '../lib/gcfilms/';
+-    foreach (glob "../lib/gcfilms/GCLang/*.pm")
++    use lib '/usr/share/gcfilms/lib/';
++    foreach (glob "/usr/share/gcfilms/lib/GCLang/*.pm")
+     {
+         my $lang = basename($_, '.pm');
+         eval "use GCLang::$lang";
+diff -Nur bla/lib/gcfilms/GCPlugins.pm ../BUILD/gcfilms/lib/gcfilms/GCPlugins.pm
+--- bla/lib/gcfilms/GCPlugins.pm	2005-06-30 22:51:37.000000000 +0200
++++ ../BUILD/gcfilms/lib/gcfilms/GCPlugins.pm	2005-08-08 01:04:54.000000000 +0200
+@@ -37,7 +37,7 @@
+     my $oldCwd = getcwd;
+     chdir $RealBin;
+ 
+-    foreach (glob "../lib/gcfilms/GCPlugins/*.pm")
++    foreach (glob "/usr/share/gcfilms/lib/GCPlugins/*.pm")
+     {
+         my $plugin = basename($_, '.pm')."\n";
+         next if $plugin =~ /GCPluginsBase/;
