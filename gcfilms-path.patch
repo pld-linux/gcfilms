@@ -144,3 +144,149 @@ diff -Nur bla/lib/gcfilms/GCPlugins.pm ../BUILD/gcfilms/lib/gcfilms/GCPlugins.pm
      {
          my $plugin = basename($_, '.pm')."\n";
          next if $plugin =~ /GCPluginsBase/;
+diff -Nur ../gcfilms/lib/gcfilms/GCExport.pm ./lib/gcfilms/GCExport.pm
+--- ../gcfilms/lib/gcfilms/GCExport.pm	2005-08-08 11:25:21.000000000 +0200
++++ ./lib/gcfilms/GCExport.pm	2005-08-08 01:14:15.000000000 +0200
+@@ -25,16 +25,12 @@
+ use strict;
+ 
+ use File::Basename;
+-use FindBin qw($RealBin);
+ 
+ use base 'Exporter';
+ our @EXPORT = qw(@exportersArray);
+ 
+ our @exportersArray;
+ 
+-use Cwd;
+-my $oldCwd = getcwd;
+-chdir $RealBin;
+ foreach (glob "/usr/share/gcfilms/lib/GCExport/*.pm")
+ {
+     my $export = basename($_, '.pm')."\n";
+@@ -46,7 +42,6 @@
+     die "Fatal error with exporter $export\n$@" if $@;
+     push @exportersArray, $obj if ! $obj->{errors};
+ }
+-chdir $oldCwd;
+ 
+ use Gtk2;
+ use GCDialogs;
+diff -Nur ../gcfilms/lib/gcfilms/GCImport.pm ./lib/gcfilms/GCImport.pm
+--- ../gcfilms/lib/gcfilms/GCImport.pm	2005-08-08 11:25:21.000000000 +0200
++++ ./lib/gcfilms/GCImport.pm	2005-08-08 01:14:24.000000000 +0200
+@@ -23,16 +23,12 @@
+ ###################################################
+ 
+ use File::Basename;
+-use FindBin qw($RealBin);
+ 
+ use base 'Exporter';
+ our @EXPORT = qw(@importersArray);
+ 
+ our @importersArray;
+ 
+-use Cwd;
+-my $oldCwd = getcwd;
+-chdir $RealBin;
+ foreach (glob "/usr/share/gcfilms/lib/GCImport/*.pm")
+ {
+     my $import = basename($_, '.pm')."\n";
+@@ -44,7 +40,6 @@
+     die "Fatal error with importer $import\n$@" if $@;
+     push @importersArray, $obj if ! $obj->{errors};
+ }
+-chdir $oldCwd;
+ 
+ use Gtk2;
+ use GCDialogs;
+diff -Nur ../gcfilms/lib/gcfilms/GCLang.pm ./lib/gcfilms/GCLang.pm
+--- ../gcfilms/lib/gcfilms/GCLang.pm	2005-08-08 11:25:21.000000000 +0200
++++ ./lib/gcfilms/GCLang.pm	2005-08-08 11:23:49.000000000 +0200
+@@ -29,18 +29,9 @@
+ 	our @EXPORT = qw(%langs @langsNames);
+ 
+     use File::Basename;
+-    use FindBin qw($RealBin $Script);
+-
+-    my $baseDir = $RealBin;
+-    $baseDir .= '/bin' if $Script =~ m/install$/;
+-    $baseDir = '..' if $Script eq '-e';
+-    
+     our %langs;
+ 
+-    use Cwd;
+-    my $oldCwd = getcwd;
+-    chdir $baseDir;
+-    use lib '/usr/share/gcfilms/lib/';
++    use lib '/usr/share/gcfilms/lib';
+     foreach (glob "/usr/share/gcfilms/lib/GCLang/*.pm")
+     {
+         my $lang = basename($_, '.pm');
+@@ -49,7 +40,6 @@
+         eval "%tmpLang = %GCLang::${lang}::lang";
+         $langs{$lang} = \%tmpLang;
+     }
+-    chdir $oldCwd;
+     our @langsNames;
+     foreach (keys %langs)
+     {
+diff -Nur ../gcfilms/lib/gcfilms/GCPlugins.pm ./lib/gcfilms/GCPlugins.pm
+--- ../gcfilms/lib/gcfilms/GCPlugins.pm	2005-08-08 11:25:21.000000000 +0200
++++ ./lib/gcfilms/GCPlugins.pm	2005-08-08 11:24:49.000000000 +0200
+@@ -26,17 +26,12 @@
+     use strict;
+     
+     use File::Basename;
+-    use FindBin qw($RealBin);
+ 
+  	use base 'Exporter';
+ 	our @EXPORT = qw(%pluginsMap @pluginsNameArray);
+ 
+     our %pluginsMap;
+ 
+-    use Cwd;
+-    my $oldCwd = getcwd;
+-    chdir $RealBin;
+-
+     foreach (glob "/usr/share/gcfilms/lib/GCPlugins/*.pm")
+     {
+         my $plugin = basename($_, '.pm')."\n";
+--- fcfilms/lib/gcfilms/GCPlugins.pm	2005-08-08 12:26:47.000000000 +0300
++++ GCPlugins.pm	2005-08-08 12:30:04.062612904 +0300
+@@ -44,7 +44,6 @@
+         #push @pluginsArray, $obj;
+         $pluginsMap{$obj->getName} = $obj;
+     }
+-    chdir $oldCwd;
+ 
+     our @pluginsNameArray = sort keys %pluginsMap;
+     
+--- gcfilms/lib/gcfilms/GCMainWindow.pm	2005-07-20 20:46:17.000000000 +0300
++++ GCMainWindow.pm	2005-08-08 12:34:15.674362104 +0300
+@@ -125,11 +125,6 @@
+     package GCFrame;
+     use base "Gtk2::Window";
+ 
+-    if ($^O =~ /win32/i)
+-    {
+-        use File::DosGlob 'glob';
+-    }
+-
+     use GCMoviesLists;
+     use GCPlugins;
+     use GCGraphicComponents;
+--- gcfilms/lib/gcfilms/GCExport/GCExportBase.pm	2005-07-22 16:29:09.000000000 +0300
++++ GCExport/GCExportBase.pm	2005-08-08 12:35:51.802748368 +0300
+@@ -29,11 +29,6 @@
+     use File::Basename;
+     use File::Copy;
+     
+-    if ($^O =~ /win32/i)
+-    {
+-        use File::DosGlob 'glob';
+-    }
+-    
+     #Methods to be overriden in specific classes
+     
+     sub new
