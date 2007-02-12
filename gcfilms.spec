@@ -1,6 +1,6 @@
 %include	/usr/lib/rpm/macros.perl
 Summary:	GCfilms - movies collection management
-Summary(pl):	GCfilms - narzêdzie do zarz±dzania kolekcjami filmów
+Summary(pl.UTF-8):   GCfilms - narzÄ™dzie do zarzÄ…dzania kolekcjami filmÃ³w
 Name:		gcfilms
 Version:	5.3
 Release:	0.14
@@ -21,9 +21,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 GCfilms is a Gtk2 Movie Catalog. Application that can be used to
 manage a movie collection.
 
-%description -l pl
-GCfilms to katalog filmów oparty na Gtk2. Mo¿e byæ u¿ywany do
-zarz±dzania kolekcjami filmów.
+%description -l pl.UTF-8
+GCfilms to katalog filmÃ³w oparty na Gtk2. MoÅ¼e byÄ‡ uÅ¼ywany do
+zarzÄ…dzania kolekcjami filmÃ³w.
 
 %prep
 %setup -q -n gcfilms
