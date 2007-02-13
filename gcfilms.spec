@@ -1,6 +1,6 @@
 %include	/usr/lib/rpm/macros.perl
 Summary:	GCfilms - movies collection management
-Summary(pl.UTF-8):   GCfilms - narzędzie do zarządzania kolekcjami filmów
+Summary(pl.UTF-8):	GCfilms - narzędzie do zarządzania kolekcjami filmów
 Name:		gcfilms
 Version:	5.3
 Release:	0.14
