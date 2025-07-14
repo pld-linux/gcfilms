@@ -26,7 +26,7 @@ zarządzania kolekcjami filmów.
 
 %prep
 %setup -q -n gcfilms
-%patch0 -p1 
+%patch -P0 -p1 
 
 %install
 rm -rf $RPM_BUILD_ROOT
